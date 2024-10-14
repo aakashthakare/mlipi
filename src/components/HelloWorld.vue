@@ -27,12 +27,12 @@
               {{ tivraM() }}
             </span>
           </span>
-          <span v-if="matra.symbols.length > 1" :style="computeFontSize(matra.symbols)" >⌣</span>
+          <span v-if="hasMoreThanOneSymbol(matra.symbols)" :style="computeFontSize(matra.symbols)" >⌣</span>
           &nbsp;
         </span>
         <span>&nbsp;|&nbsp;</span>
-        <span v-if="i + 1 >= k.length">&nbsp;|&nbsp;</span>
       </span>
+      <span>&nbsp;|&nbsp;</span>
     </div>
     <div class="no-print" style="height: 200px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
       <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:5px;">
@@ -48,7 +48,7 @@
 export default {
   data() {
     return {
-      input: '[Xr][sr][srg][sr-gmp]|[Xmdn][p][pd,sg][pd]|[0m^dn_][p][pdsg][p$d]|[Xmdn\'][p][pdgg][pd]||',
+      input: 'r m r p | m r s - | n, - s r | s - s - ||',
       matra: {
         taliKhali: -1,
         symbols: []
@@ -58,6 +58,9 @@ export default {
     };
   },
   methods: {
+    hasMoreThanOneSymbol(symbols) {
+      return symbols.filter(char => 'srgmpdn'.includes(char)).length > 1;
+    },
     clear() {
       this.khand = []
       this.comp = []
@@ -216,13 +219,12 @@ export default {
     parse(input) {
       input.split("|").filter(item => item !== '').map(item => {
         item = item.trim();
-        
-        const regex = /\[(.*?)\]/g;
-        let match;
+        var mt = item.split(' ');
         var matras = [];
-        while ((match = regex.exec(item)) !== null) {
+
+        for (var i = 0; i < mt.length; i++) {
           var taliKhali;
-          var m = match[1];
+          var m = mt[i];
           
           if(m.charAt(0) == '0') {taliKhali = 0;}
           else if(m.charAt(0) == 'X') {taliKhali = 1;}
