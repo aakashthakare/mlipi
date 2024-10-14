@@ -1,40 +1,46 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
-      <textarea rows="10" cols="100" v-model="input"></textarea> <br />
-      <input type="submit" value="Load"/>
-    </form> <br />
-    <span v-for="(k, i) in this.khand" :key="i"> 
-      <span v-for="(matra, index) in k" :key="index">
-        <span v-if="isTaliCount(matra.taliKhali)" style="margin-top: 30px;position: absolute;float: left;margin-left: -5px;">
-          {{ toTaliKhali(matra.taliKhali) }}
+    <div v-for="(c, j) in this.comp" :key="j">
+      <br /><br />
+      <span v-for="(k, i) in c" :key="i"> 
+        <span v-for="(matra, index) in k" :key="index">
+          <span v-if="isTaliCount(matra.taliKhali)" style="margin-top: 30px;position: absolute;float: left;margin-left: -5px;">
+            {{ toTaliKhali(matra.taliKhali) }}
+          </span>
+          <span v-for="(symbol, index) in matra.symbols" :key="index">
+            <span v-if="isDashOrAvgrah(symbol)">
+              {{ toDashOrAvgrah(symbol) }}
+            </span>
+            <span v-else-if="isNextChar(index, matra.symbols)">
+              {{ toGujarati(symbol) }}
+            </span>
+            <span v-else-if="isNexQuote(index, matra.symbols)">
+              {{ taarSaptak(symbol) }}
+            </span>
+            <span v-else-if="isNextUnderscore(index, matra.symbols)">
+              <u>{{ toGujarati(symbol) }}</u>
+            </span>
+            <span v-else-if="isNextComma(index, matra.symbols)">
+              {{ mandraSaptak(symbol) }}
+            </span>
+            <span v-else-if="isNextTild(index, matra.symbols)">
+              {{ tivraM() }}
+            </span>
+          </span>
+          <span v-if="matra.symbols.length > 1" :style="computeFontSize(matra.symbols)" >⌣</span>
+          &nbsp;
         </span>
-        <span v-for="(symbol, index) in matra.symbols" :key="index">
-          <span v-if="isDashOrAvgrah(symbol)">
-            {{ toDashOrAvgrah(symbol) }}
-          </span>
-          <span v-else-if="isNextChar(index, matra.symbols)">
-            {{ toGujarati(symbol) }}
-          </span>
-          <span v-else-if="isNexQuote(index, matra.symbols)">
-            {{ taarSaptak(symbol) }}
-          </span>
-          <span v-else-if="isNextUnderscore(index, matra.symbols)">
-            <u>{{ toGujarati(symbol) }}</u>
-          </span>
-          <span v-else-if="isNextComma(index, matra.symbols)">
-            {{ mandraSaptak(symbol) }}
-          </span>
-          <span v-else-if="isNextTild(index, matra.symbols)">
-            {{ tivraM() }}
-          </span>
-        </span>
-        <span v-if="matra.symbols.length > 1" :style="computeFontSize(matra.symbols)" >⌣</span>
-        &nbsp;
+        <span>&nbsp;|&nbsp;</span>
+        <span v-if="i + 1 >= k.length">&nbsp;|&nbsp;</span>
       </span>
-      <span>|</span>
-      <span v-if="isLastKhand(i)">|</span> <br /> <br /> <br /> 
-    </span>
+    </div>
+    <div class="no-print" style="height: 200px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
+      <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:5px;">
+        <textarea rows="10" cols="200" v-model="input"></textarea> <br />
+        <input type="submit" value="Add"/>&nbsp;&nbsp;
+        <input type="button" value="Clear" @click="clear"/>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -42,17 +48,19 @@
 export default {
   data() {
     return {
-      input: '[Xr][sr][srg][sr-gmp]|[Xmdn][p][pd,sg][pd]|[0m^dn_][p][pdsg][p$d]|[Xmdn\'][p][pdsg][pd]||',
+      input: '[Xr][sr][srg][sr-gmp]|[Xmdn][p][pd,sg][pd]|[0m^dn_][p][pdsg][p$d]|[Xmdn\'][p][pdgg][pd]||',
       matra: {
         taliKhali: -1,
         symbols: []
       },
-      khand: []
+      khand: [],
+      comp: []
     };
   },
   methods: {
-    isLastKhand(index) {
-      return index + 1 == this.khand.length;
+    clear() {
+      this.khand = []
+      this.comp = []
     },
     tivraM() {
       return 'મે';
@@ -194,7 +202,7 @@ export default {
       }
 
       const fontSize = charW + 'px';
-      var marginTop = (16 - count) +'px'; 
+      var marginTop = (16 - (count * 2)) +'px'; 
       var marginLeft = (count * -1 * 12) + 'px';
 
       return {
@@ -233,6 +241,8 @@ export default {
     },
     submit() {
       this.parse(this.input);
+      this.comp.push(this.khand);
+      this.khand = [];
     }
   }
 }
@@ -255,5 +265,11 @@ a {
   color: #42b983;
 }
 .hello {display:none;}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}
 </style>
 
