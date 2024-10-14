@@ -1,30 +1,30 @@
 <template>
   <div>
-    <div v-for="(c, j) in this.comp" :key="j">
+    <div v-for="(c, j) in this.comp" :key="j" :style="{ fontSize: this.baseFontSize + 'px' }">
       <br /><br />
       <span v-for="(k, i) in c" :key="i"> 
         <span v-for="(matra, index) in k" :key="index">
-          <span v-if="isTaliCount(matra.taliKhali)" style="margin-top: 30px;position: absolute;float: left;margin-left: -5px;">
-            {{ toTaliKhali(matra.taliKhali) }}
+          <span style="margin-top: 35px;position: absolute;float: left;margin-left: -5px;font-size: 15px;color: green;">
+            {{ toGujarati(matra.taliKhali) }}
           </span>
           <span v-for="(symbol, index) in matra.symbols" :key="index">
             <span v-if="isDashOrAvgrah(symbol)">
               {{ toDashOrAvgrah(symbol) }}
             </span>
-            <span v-else-if="isNextChar(index, matra.symbols)">
-              {{ toGujarati(symbol) }}
-            </span>
             <span v-else-if="isNexQuote(index, matra.symbols)">
               {{ taarSaptak(symbol) }}
-            </span>
-            <span v-else-if="isNextUnderscore(index, matra.symbols)">
-              <u>{{ toGujarati(symbol) }}</u>
             </span>
             <span v-else-if="isNextComma(index, matra.symbols)">
               {{ mandraSaptak(symbol) }}
             </span>
             <span v-else-if="isNextTild(index, matra.symbols)">
               {{ tivraM() }}
+            </span>
+            <span v-else-if="isNextUnderscore(index, matra.symbols)">
+              <u>{{ toGujarati(symbol) }}</u>
+            </span>
+            <span v-else-if="isNextChar(index, matra.symbols)">
+              {{ toGujarati(symbol) }}
             </span>
           </span>
           <span v-if="hasMoreThanOneSymbol(matra.symbols)" :style="computeFontSize(matra.symbols)" >⌣</span>
@@ -34,9 +34,9 @@
       </span>
       <span>&nbsp;|&nbsp;</span>
     </div>
-    <div class="no-print" style="height: 200px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
+    <div class="no-print" style="height: 150px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
       <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:5px;">
-        <textarea rows="10" cols="200" v-model="input"></textarea> <br />
+        <textarea rows="5" cols="200" v-model="input"></textarea> <br />
         <input type="submit" value="Add"/>&nbsp;&nbsp;
         <input type="button" value="Clear" @click="clear"/>
       </form>
@@ -48,9 +48,10 @@
 export default {
   data() {
     return {
-      input: 'r m r p | m r s - | n, - s r | s - s - ||',
+      baseFontSize: 20,
+      input: 'Xrmrp m--r 0rpsp pmgr\'|Xmr--  n,-sr 0s-s-||',
       matra: {
-        taliKhali: -1,
+        taliKhali: '',
         symbols: []
       },
       khand: [],
@@ -71,14 +72,8 @@ export default {
     isDashOrAvgrah(symbol) {
       return symbol == '-' || symbol == '$';
     },
-    toTaliKhali(taliKhali) {
-      return taliKhali == 0 ? '0' : 'X';
-    },
-    isTaliCount(taliKhali){
-      return taliKhali >= 0;
-    },
     isNextChar(index, symbols){
-      return index + 1 >= symbols.length || 'srgmpdn'.includes(symbols[index + 1]);
+      return 'srgmpdn'.includes(symbols[index]);
     },
     isNexQuote(index, symbols){
       return symbols[index + 1] == '\'';
@@ -118,6 +113,39 @@ export default {
             break;
           case 'n':
             s = 'ની';
+            break;
+          case '0':
+            s = '૦';
+            break;
+          case '1':
+            s = '૧';
+            break;
+          case '2':
+            s = '૨';
+            break;
+          case '3':
+            s = '૩';
+            break;
+          case '4':
+            s = '૪';
+            break;
+          case '5':
+            s = '૫';
+            break;
+          case '6':
+            s = '૬';
+            break;
+          case '7':
+            s = '૭';
+            break;
+          case '8':
+            s = '૮';
+            break;
+          case '9':
+            s = '૯';
+            break;
+          case 'X':
+            s = 'X';
             break;
           default:
             break;
@@ -187,8 +215,8 @@ export default {
     },
     computeFontSize(text) {
       var charW = 0;
-      var count = 0;
-      
+      var marginLeft = 0;
+
       for (let i = 0; i < text.length; i++) {
         switch(text[i]) {
           case 's':
@@ -198,21 +226,37 @@ export default {
           case 'g':
           case 'm':
           case 'p':
-            charW += 16;
-            count++;
+          case '-':
+            charW += this.baseFontSize;
+            break;
+        }
+        const left = this.baseFontSize / 2;
+        switch(text[i]) {
+          case 's':
+            marginLeft += (left * 1.5);
+            break;  
+          case 'n':
+          case 'r':
+            marginLeft += (left * 1.25);
+            break;
+          case 'm':
+          case 'd':
+          case 'g':
+          case 'p':
+          case '-':
+            marginLeft += left;
             break;
         }
       }
 
-      const fontSize = charW + 'px';
-      var marginTop = (16 - (count * 2)) +'px'; 
-      var marginLeft = (count * -1 * 12) + 'px';
+      const fontSize = (charW - this.baseFontSize) + 'px';
+      var marginTop = this.baseFontSize * 0.75;
 
       return {
         fontSize: fontSize,
         position: 'absolute',
-        marginTop: marginTop,
-        marginLeft: marginLeft,
+        marginTop: marginTop + 'px',
+        marginLeft: (marginLeft * -1) + 'px',
         color: 'gray'
       };
     },
@@ -223,15 +267,14 @@ export default {
         var matras = [];
 
         for (var i = 0; i < mt.length; i++) {
-          var taliKhali;
+          var taliKhali = '';
           var m = mt[i];
           
-          if(m.charAt(0) == '0') {taliKhali = 0;}
-          else if(m.charAt(0) == 'X') {taliKhali = 1;}
-          else {taliKhali = -1;}
+          if((m.charAt(0) >= '0' && m.charAt(0) <= '9') || m.charAt(0) == 'X') {
+            taliKhali = m.charAt(0);
+            m = m.substring(1, m.length);
+          }
 
-          if(taliKhali >= 0) {m = m.substring(1, m.length);}
-          
           const matra = {
             taliKhali: taliKhali,
             symbols: m.split('').map(item =>  item.trim())
