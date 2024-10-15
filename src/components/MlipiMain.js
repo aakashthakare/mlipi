@@ -215,7 +215,7 @@ export default {
   
               const matra = {
                 taliKhali: taliKhali,
-                symbols: m.split('').filter(item => item.trim().length > 0).map(item =>  item.trim())
+                symbols: m.split('').filter(item => item.trim().length > 0).filter(char => 'srgmpdn$,\'_^'.includes(char)).map(item =>  item.trim())
               };
               matras.push(matra);
             }
