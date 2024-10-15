@@ -2,10 +2,10 @@
   <div>
     <div v-for="(p, k) in this.page" :key="k" >
       <div v-for="(c, j) in p" :key="j" :style="{ fontSize: this.baseFontSize + 'px' }">
-        <br /><br />
+        <br />
         <span v-for="(k, i) in c" :key="i"> 
-          <span v-for="(matra, index) in k" :key="index">
-            <span style="margin-top: 35px;position: absolute;float: left;margin-left: -5px;font-size: 15px;color: green;">
+          <span v-for="(matra, index) in k" :key="index" style="padding:5px;">
+            <span v-if="matra.taliKhali != ''" style="margin-top: 35px;position: absolute;float: left;margin-left: -5px;font-size: 15px;color: green;">
               {{ toGujarati(matra.taliKhali) }}
             </span>
             <span v-for="(symbol, index) in matra.symbols" :key="index">
@@ -33,7 +33,6 @@
           </span>
           <span>&nbsp;|&nbsp;</span>
         </span>
-        <span>&nbsp;|&nbsp;</span>
       </div>
     </div>
     <div class="no-print" style="height: 150px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
@@ -51,7 +50,8 @@ export default {
   data() {
     return {
       baseFontSize: 20,
-      input: 'Xrmrp m--r 0rpsp pmgr\'|Xmr--  n,-sr 0s-s-||',
+      //input: 'Xrmrp m--r 0rpsp pmgr\'|Xmr--  n,-sr 0s-s-||',
+      input: 'ss rr gg mm pp dd nn ss\nsr sg sm sp sd sn ss\'\nrg rm rp rd rn rs\'',
       matra: {
         taliKhali: '',
         symbols: []
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     hasMoreThanOneSymbol(symbols) {
-      return symbols.filter(char => 'srgmpdn'.includes(char)).length > 1;
+      return symbols.filter(char => /[srgmpdn]/.test(char)).length > 1;
     },
     clear() {
       this.page = []
@@ -214,55 +214,28 @@ export default {
         return s;
     },
     computeFontSize(text) {
-      var charW = 0;
-      var marginLeft = 0;
-
-      for (let i = 0; i < text.length; i++) {
-        switch(text[i]) {
-          case 's':
-          case 'n':
-          case 'r':
-          case 'd':
-          case 'g':
-          case 'm':
-          case 'p':
-          case '-':
-            charW += this.baseFontSize;
-            break;
-        }
-        const left = this.baseFontSize / 2;
-        switch(text[i]) {
-          case 's':
-            marginLeft += (left * 1.5);
-            break;  
-          case 'n':
-          case 'r':
-            marginLeft += (left * 1.25);
-            break;
-          case 'm':
-          case 'd':
-          case 'g':
-          case 'p':
-          case '-':
-            marginLeft += left;
-            break;
-        }
-      }
-
-      const fontSize = (charW - this.baseFontSize) + 'px';
-      var marginTop = this.baseFontSize * 0.75;
+      const map = new Map();
+      map.set('s', 20.09);
+      map.set('r', 9.48);
+      map.set('g', 14.32);
+      map.set('m', 11.52);
+      map.set('p', 11.45);
+      map.set('d', 13.1);
+      map.set('n', 16.19);
+      map.set('-', 6.66);
+      map.set('$', 10.09);
+      var width = text.filter(char =>!/[,'_^\s]/.test(char)).reduce((sum, w) => sum + map.get(w), 0);
+      var swar = (text.filter(char => !/[,'_^\s]/.test(char)).length - 1);
 
       return {
-        fontSize: fontSize,
         position: 'absolute',
-        marginTop: marginTop + 'px',
-        marginLeft: (marginLeft * -1) + 'px',
-        color: 'gray'
+        color: 'gray',
+        fontSize: (width + 17.38) + 'px',
+        marginLeft: (-1 * width) + 'px',
+        marginTop: (27.5 - (swar * 3)) + 'px'
       };
     },
     submit() {
-      console.log(this.input);
-
       var comps = this.input.split("\n");
       var c = [];
 
@@ -299,7 +272,6 @@ export default {
         if(k.length > 0) c.push(k);
       }
       this.page.push(c);
-      console.log(this.page);
     }
   }
 }
@@ -324,7 +296,7 @@ a {
 .hello {display:none;}
 
 @media print {
-  .no-print {
+  .no-print { 
     display: none;
   }
 }

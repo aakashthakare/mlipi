@@ -1,15 +1,15 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <HelloWorld msg="Welcome to Your Vue.js App" style="text-align: left;margin-left: 40px;" />
+  <MlipiMain msg="Welcome to Your Vue.js App" style="text-align: left;margin-left: 40px;" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MlipiMain from './components/MlipiMain.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    MlipiMain
   }
 }
 </script>
