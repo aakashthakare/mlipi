@@ -1,38 +1,40 @@
 <template>
   <div>
-    <div v-for="(c, j) in this.comp" :key="j" :style="{ fontSize: this.baseFontSize + 'px' }">
-      <br /><br />
-      <span v-for="(k, i) in c" :key="i"> 
-        <span v-for="(matra, index) in k" :key="index">
-          <span style="margin-top: 35px;position: absolute;float: left;margin-left: -5px;font-size: 15px;color: green;">
-            {{ toGujarati(matra.taliKhali) }}
+    <div v-for="(p, k) in this.page" :key="k" >
+      <div v-for="(c, j) in p" :key="j" :style="{ fontSize: this.baseFontSize + 'px' }">
+        <br /><br />
+        <span v-for="(k, i) in c" :key="i"> 
+          <span v-for="(matra, index) in k" :key="index">
+            <span style="margin-top: 35px;position: absolute;float: left;margin-left: -5px;font-size: 15px;color: green;">
+              {{ toGujarati(matra.taliKhali) }}
+            </span>
+            <span v-for="(symbol, index) in matra.symbols" :key="index">
+              <span v-if="isDashOrAvgrah(symbol)">
+                {{ toDashOrAvgrah(symbol) }}
+              </span>
+              <span v-else-if="isNexQuote(index, matra.symbols)">
+                {{ taarSaptak(symbol) }}
+              </span>
+              <span v-else-if="isNextComma(index, matra.symbols)">
+                {{ mandraSaptak(symbol) }}
+              </span>
+              <span v-else-if="isNextTild(index, matra.symbols)">
+                {{ tivraM() }}
+              </span>
+              <span v-else-if="isNextUnderscore(index, matra.symbols)">
+                <u>{{ toGujarati(symbol) }}</u>
+              </span>
+              <span v-else-if="isNextChar(index, matra.symbols)">
+                {{ toGujarati(symbol) }}
+              </span>
+            </span>
+            <span v-if="hasMoreThanOneSymbol(matra.symbols)" :style="computeFontSize(matra.symbols)" >⌣</span>
+            &nbsp;
           </span>
-          <span v-for="(symbol, index) in matra.symbols" :key="index">
-            <span v-if="isDashOrAvgrah(symbol)">
-              {{ toDashOrAvgrah(symbol) }}
-            </span>
-            <span v-else-if="isNexQuote(index, matra.symbols)">
-              {{ taarSaptak(symbol) }}
-            </span>
-            <span v-else-if="isNextComma(index, matra.symbols)">
-              {{ mandraSaptak(symbol) }}
-            </span>
-            <span v-else-if="isNextTild(index, matra.symbols)">
-              {{ tivraM() }}
-            </span>
-            <span v-else-if="isNextUnderscore(index, matra.symbols)">
-              <u>{{ toGujarati(symbol) }}</u>
-            </span>
-            <span v-else-if="isNextChar(index, matra.symbols)">
-              {{ toGujarati(symbol) }}
-            </span>
-          </span>
-          <span v-if="hasMoreThanOneSymbol(matra.symbols)" :style="computeFontSize(matra.symbols)" >⌣</span>
-          &nbsp;
+          <span>&nbsp;|&nbsp;</span>
         </span>
         <span>&nbsp;|&nbsp;</span>
-      </span>
-      <span>&nbsp;|&nbsp;</span>
+      </div>
     </div>
     <div class="no-print" style="height: 150px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
       <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:5px;">
@@ -54,8 +56,7 @@ export default {
         taliKhali: '',
         symbols: []
       },
-      khand: [],
-      comp: []
+      page: []
     };
   },
   methods: {
@@ -63,8 +64,7 @@ export default {
       return symbols.filter(char => 'srgmpdn'.includes(char)).length > 1;
     },
     clear() {
-      this.khand = []
-      this.comp = []
+      this.page = []
     },
     tivraM() {
       return 'મે';
@@ -260,34 +260,46 @@ export default {
         color: 'gray'
       };
     },
-    parse(input) {
-      input.split("|").filter(item => item !== '').map(item => {
-        item = item.trim();
-        var mt = item.split(' ');
-        var matras = [];
-
-        for (var i = 0; i < mt.length; i++) {
-          var taliKhali = '';
-          var m = mt[i];
-          
-          if((m.charAt(0) >= '0' && m.charAt(0) <= '9') || m.charAt(0) == 'X') {
-            taliKhali = m.charAt(0);
-            m = m.substring(1, m.length);
-          }
-
-          const matra = {
-            taliKhali: taliKhali,
-            symbols: m.split('').map(item =>  item.trim())
-          };
-          matras.push(matra);
-        }
-        this.khand.push(matras);
-      });
-    },
     submit() {
-      this.parse(this.input);
-      this.comp.push(this.khand);
-      this.khand = [];
+      console.log(this.input);
+
+      var comps = this.input.split("\n");
+      var c = [];
+
+      for(var i = 0; i < comps.length; i++) {
+        var item = comps[i].trim();
+        if(item.length == 0) continue;
+
+        var khands = item.split("|");
+        var k = [];
+
+        for(var j = 0; j < khands.length; j++) {
+          var mt = khands[j].split(' ');
+          if(mt.length == 0) continue;
+          var matras = [];
+
+          for (var a = 0; a < mt.length; a++) {
+            var taliKhali = '';
+            var m = mt[a];
+            if(m.trim().length == 0) continue;
+            
+            if((m.charAt(0) >= '0' && m.charAt(0) <= '9') || m.charAt(0) == 'X') {
+              taliKhali = m.charAt(0);
+              m = m.substring(1, m.length);
+            }
+
+            const matra = {
+              taliKhali: taliKhali,
+              symbols: m.split('').filter(item => item.trim().length > 0).map(item =>  item.trim())
+            };
+            matras.push(matra);
+          }
+          if(matras.length > 0) k.push(matras);
+        }
+        if(k.length > 0) c.push(k);
+      }
+      this.page.push(c);
+      console.log(this.page);
     }
   }
 }
