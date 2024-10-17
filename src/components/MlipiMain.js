@@ -193,12 +193,14 @@ export default {
   
         for(var i = 0; i < comps.length; i++) {
           var item = comps[i].trim();
+          
           if(item.length == 0) continue;
   
           var khands = item.split("|");
           var k = [];
   
           for(var j = 0; j < khands.length; j++) {
+            console.log(khands[j]);
             var mt = khands[j].split(' ');
             if(mt.length == 0) continue;
             var matras = [];
@@ -206,6 +208,7 @@ export default {
             for (var a = 0; a < mt.length; a++) {
               var taliKhali = '';
               var m = mt[a];
+              console.log("m ->"+m);
               if(m.trim().length == 0) continue;
               
               if((m.charAt(0) >= '0' && m.charAt(0) <= '9') || m.charAt(0) == 'X') {
@@ -223,6 +226,7 @@ export default {
           }
           if(k.length > 0) c.push(k);
         }
+        console.log(c);
         this.page.push(c);
       }
     }
