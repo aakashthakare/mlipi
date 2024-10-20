@@ -89,31 +89,40 @@ export default {
         this.updateCache();
         var comps = this.input.split("\n");
         var c = [];
+        
   
         for(var i = 0; i < comps.length; i++) {
           var item = comps[i].trim();
-          
           if(item.length == 0) continue;
-  
-          var m = item.split(" ");
-          var matras = [];
 
-          for(var x = 0; x < m.length; x++) {
-            var mt = m[x];
-            var taliKhali = '';
-            if(mt.length == 0) continue;
+          if(item.startsWith('==')) {
+            c.push([{
+              taliKhali: '',
+              symbols: item.slice(2),
+              isComment: true
+            }]);
+          } else {
+            var matras = [];
+            var m = item.split(" ");
             
-            if((mt.charAt(0) >= '0' && mt.charAt(0) <= '9') || mt.charAt(0) == 'X') {
-              taliKhali = mt.charAt(0);
-              mt = mt.substring(1, mt.length);
+            for(var x = 0; x < m.length; x++) {
+              var mt = m[x];
+              var taliKhali = '';
+              if(mt.length == 0) continue;
+              
+              if((mt.charAt(0) >= '0' && mt.charAt(0) <= '9') || mt.charAt(0) == 'X') {
+                taliKhali = mt.charAt(0);
+                mt = mt.substring(1, mt.length);
+              }
+            
+              matras.push({
+                taliKhali: taliKhali,
+                symbols: mt,
+                isComment: false
+              });
             }
-            
-            matras.push({
-              taliKhali: taliKhali,
-              symbols: mt
-            });
+            if(matras.length > 0) c.push(matras);
           }
-          if(matras.length > 0) c.push(matras);
         }
         this.page.push(c);
       }
