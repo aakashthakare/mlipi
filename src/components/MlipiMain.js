@@ -13,7 +13,7 @@ export default {
     },
     methods: {
       toGujarati(number) {
-        var s = '';
+        var s = '­';
         switch (number) {
             case '0':
               s = '૦';
