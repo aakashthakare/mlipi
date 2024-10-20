@@ -6,7 +6,8 @@ export default {
         input: '',
         matra: {
           taliKhali: '',
-          symbols: []
+          symbols: [],
+          ending: ''
         },
         page: []
       };
@@ -57,15 +58,19 @@ export default {
         const segmenter = new Intl.Segmenter('gu', { granularity: 'grapheme' });
         return [...segmenter.segment(text)].length;
       },
-      getTextWidth(text) {
-        var length = this.actualLength(text);
-        console.log("L : " + length);
+      isMatraNeeded(text) {
+        text = text.replaceAll('|', '');
+        return this.actualLength(text) > 1;
+      },
+      getTextWidth(matras) {
+        var length = this.actualLength(matras.symbols);
+        
         var curve = '◟';
         for(var i = 0; i < length; i++) {
           curve += '_';
         }
         curve += '◞';
-        console.log("C : " + curve);
+        
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         context.font = getComputedStyle(document.body).font;
@@ -83,32 +88,26 @@ export default {
           
           if(item.length == 0) continue;
   
-          var khands = item.split("|");
-          var k = [];
-  
-          for(var j = 0; j < khands.length; j++) {
-            var m = khands[j].split(" ");
-            var matras = [];
+          var m = item.split(" ");
+          var matras = [];
 
-            for(var x = 0; x < m.length; x++) {
-              var mt = m[x];
-              var taliKhali = '';
-              if(mt.length == 0) continue;
-              
-              if((mt.charAt(0) >= '0' && mt.charAt(0) <= '9') || mt.charAt(0) == 'X') {
-                taliKhali = mt.charAt(0);
-                mt = mt.substring(1, mt.length);
-              }
-              matras.push({
-                taliKhali: taliKhali,
-                symbols: mt
-              });
+          for(var x = 0; x < m.length; x++) {
+            var mt = m[x];
+            var taliKhali = '';
+            if(mt.length == 0) continue;
+            
+            if((mt.charAt(0) >= '0' && mt.charAt(0) <= '9') || mt.charAt(0) == 'X') {
+              taliKhali = mt.charAt(0);
+              mt = mt.substring(1, mt.length);
             }
-            if(matras.length > 0) k.push(matras);
+            
+            matras.push({
+              taliKhali: taliKhali,
+              symbols: mt
+            });
           }
-          if(k.length > 0) c.push(k);
+          if(matras.length > 0) c.push(matras);
         }
-        console.log(c);
         this.page.push(c);
       }
     }

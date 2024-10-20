@@ -2,20 +2,14 @@
   <div>
     <div v-for="(p, k) in this.page" :key="k" >
       <div v-for="(c, j) in p" :key="j">
-        <div v-for="(k, i) in c" :key="i"> 
-          <div v-for="(matra, index) in k" :key="index" :style="{ width: getTextWidth(matra.symbols) + 'px', display: 'inline-block', textAlign: 'center', padding: '2px'}">
-            <table>
-              <tr><span>{{matra.symbols}}</span></tr>
-              <tr>
-                <span :style="{float:left, color: this.actualLength(matra.symbols) > 1 ? 'black'  :'transparent', fontSize:'14px'}">
-                  <span>◟</span><span v-for="n in actualLength(matra.symbols)" :key="n">_</span><span>◞</span>
-                </span>
-              </tr>
-              <tr>
-                <span  :style="{float:left, color: toGujarati(matra.taliKhali) != '#' ? 'green':'transparent'}">{{toGujarati(matra.taliKhali)}}</span>
-              </tr>
-            </table>
-          </div>
+        <div v-for="(matra, index) in c" :key="index" :style="{ width: (getTextWidth(matra))+ 'px', display: 'inline-block', textAlign: 'center', padding: '8px'}">
+          <span>{{matra.symbols}}</span>
+          <span :style="{float:'left', color: isMatraNeeded(matra.symbols) ? 'black'  :'transparent', fontSize:'18px', marginTop: '-10px'}">
+            <span>◟</span>
+            <span v-for="n in actualLength(matra.symbols)" :key="n">_</span>
+            <span>◞</span>
+          </span>
+          <span  :style="{float:'left', color: toGujarati(matra.taliKhali) != '#' ? 'green':'transparent'}">{{toGujarati(matra.taliKhali)}}</span>
         </div>
       </div>
     </div>

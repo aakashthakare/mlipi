@@ -1,6 +1,6 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <MlipiMain msg="Welcome to Your Vue.js App" style="text-align: left;margin-left: 40px;" />
+  <MlipiMain msg="Welcome to Your Vue.js App" style="text-align: left;" />
 </template>
 
 <script>
