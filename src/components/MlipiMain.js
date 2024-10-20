@@ -12,18 +12,60 @@ export default {
       };
     },
     methods: {
+      toGujarati(number) {
+        var s = '';
+        switch (number) {
+            case '0':
+              s = '૦';
+              break;
+            case '1':
+              s = '૧';
+              break;
+            case '2':
+              s = '૨';
+              break;
+            case '3':
+              s = '૩';
+              break;
+            case '4':
+              s = '૪';
+              break;
+            case '5':
+              s = '૫';
+              break;
+            case '6':
+              s = '૬';
+              break;
+            case '7':
+              s = '૭';
+              break;
+            case '8':
+              s = '૮';
+              break;
+            case '9':
+              s = '૯';
+              break;
+            case 'X':
+              s = 'x';
+              break;
+            default:
+              break;
+          }
+          return s;
+      },
       actualLength(text) {
         const segmenter = new Intl.Segmenter('gu', { granularity: 'grapheme' });
         return [...segmenter.segment(text)].length;
       },
       getTextWidth(text) {
         var length = this.actualLength(text);
+        console.log("L : " + length);
         var curve = '◟';
         for(var i = 0; i < length; i++) {
           curve += '_';
         }
         curve += '◞';
-        
+        console.log("C : " + curve);
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         context.font = getComputedStyle(document.body).font;

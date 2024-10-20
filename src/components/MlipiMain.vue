@@ -2,16 +2,15 @@
   <div>
     <div v-for="(p, k) in this.page" :key="k" >
       <div v-for="(c, j) in p" :key="j">
-        <div v-for="(k, i) in c" :key="i" style="float:left"> 
-          <div v-for="(matra, index) in k" :key="index" :style="{ width: getTextWidth(matra.symbols) + 'px', display: 'inline-block', textAlign: 'center'}">
+        <div v-for="(k, i) in c" :key="i"> 
+          <div v-for="(matra, index) in k" :key="index" :style="{ width: getTextWidth(matra.symbols) + 'px', display: 'inline-block', textAlign: 'center', padding: '5px'}">
             <span>{{matra.symbols}}</span>
             <span style="float:left" v-if="hasMoreThanOneBol(matra.symbols)">
-              <span>◟</span><span v-for="(x, p) in matra.symbols" :key="p">_</span><span>◞</span>
+              <span>◟</span><span v-for="n in actualLength(matra.symbols)" :key="n">_</span><span>◞</span>
             </span>
+            <span  style="float:left; color: green;font-size:14px;">{{toGujarati(matra.taliKhali)}}</span>
           </div>
-          <span style="font-size:20px">┃</span>
         </div>
-        <br/><br/><br/>
       </div>
     </div>
     <div class="no-print" style="height: 150px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">

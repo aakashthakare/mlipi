@@ -32,7 +32,8 @@ yarn run deploy
 
 
 ToDo
-- [ ] Curve or \____/ line below
-- [ ] Tabla or any other compositions
+- [X] Curve or \____/ line below
+- [X] Tabla or any other compositions
 - [ ] Move inline style to CSS
-- [ ] Tali khali
+- [X] Tali khali
+- [ ] Khand end
