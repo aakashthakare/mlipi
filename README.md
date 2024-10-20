@@ -22,3 +22,17 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Deployment
+```
+yarn run build
+yarn run deploy
+```
+
+
+
+ToDo
+- [ ] Curve or \____/ line below
+- [ ] Tabla or any other compositions
+- [ ] Move inline style to CSS
+- [ ] Tali khali
