@@ -3,7 +3,7 @@ export default {
     data() {
       return {
         baseFontSize: 20,
-        input: '',
+        input: this.getLastInput(),
         matra: {
           taliKhali: '',
           symbols: [],
@@ -79,7 +79,14 @@ export default {
       clear() {
         this.page = []
       },
+      updateCache() {
+        localStorage.setItem('lastInput', this.input);
+      },
+      getLastInput() {
+        return localStorage.getItem('lastInput');
+      },
       submit() {
+        this.updateCache();
         var comps = this.input.split("\n");
         var c = [];
   

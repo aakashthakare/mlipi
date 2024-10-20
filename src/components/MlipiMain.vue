@@ -9,7 +9,7 @@
             <span v-for="n in actualLength(matra.symbols)" :key="n">_</span>
             <span>◞</span>
           </span>
-          <span  :style="{float:'left', color: toGujarati(matra.taliKhali) != '#' ? 'green':'transparent'}">{{toGujarati(matra.taliKhali)}}</span>
+          <span  :style="{float:'left', color: toGujarati(matra.taliKhali) != '#' ? 'black':'transparent'}">{{toGujarati(matra.taliKhali)}}</span>
         </div>
       </div>
     </div>
