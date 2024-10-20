@@ -13,7 +13,7 @@ export default {
     },
     methods: {
       toGujarati(number) {
-        var s = '­';
+        var s = '#';
         switch (number) {
             case '0':
               s = '૦';
@@ -70,9 +70,6 @@ export default {
         const context = canvas.getContext('2d');
         context.font = getComputedStyle(document.body).font;
         return context.measureText(curve).width;
-      },
-      hasMoreThanOneBol(text) {
-        return this.actualLength(text) > 1;
       },
       clear() {
         this.page = []
