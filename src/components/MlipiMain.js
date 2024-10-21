@@ -94,6 +94,7 @@ export default {
         return localStorage.getItem('lastInput');
       },
       submit() {
+        this.clear();
         this.updateCache();
         var comps = this.input.split("\n");
         var c = [];

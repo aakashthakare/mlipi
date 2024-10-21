@@ -4,16 +4,8 @@
   }
 }
 
-.submit {
-  background: peachpuff;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  padding: 5px;
-  cursor: pointer;
-}
 .otherButton {
-  background: lightgray;
+  background: lightpink;
   border-radius: 10px;
   border: none;
   font-size: 16px;
