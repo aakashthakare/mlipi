@@ -28,12 +28,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 yarn run build
 yarn run deploy
 ```
-
-
-
-ToDo
-- [X] Curve or \____/ line below
-- [X] Tabla or any other compositions
-- [ ] Move inline style to CSS
-- [X] Tali khali
-- [ ] Khand end
