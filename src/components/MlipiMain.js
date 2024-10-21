@@ -68,6 +68,8 @@ export default {
       },
       isMatraNeeded(text) {
         text = text.replaceAll('|', '');
+        text = text.replaceAll('।', '');
+        console.log(text);
         return this.actualLength(text) > 1;
       },
       getTextWidth(matras) {
