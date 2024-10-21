@@ -9,10 +9,18 @@ export default {
           symbols: [],
           ending: ''
         },
-        page: []
+        page: [],
+        transliterationEnabled: true,
       };
     },
     methods: {
+      print() {
+        window.print();
+      },
+      showHideGI() {
+        var gi = document.getElementById("gi");
+        gi.style.display = gi.style.display == 'none' ? 'block' : 'none';
+      },
       toGujarati(number) {
         var s = '#';
         switch (number) {

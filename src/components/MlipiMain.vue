@@ -18,12 +18,19 @@
         </div>
       </div>
     </div>
-    <div class="no-print" style="height: 150px;background: lightgray;position:fixed;width:100%;bottom:0;left:0;">
-      <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:5px;">
-        <textarea rows="5" cols="200" v-model="input" placeholder="Enter the composition here."></textarea> <br />
-        <input type="submit" value="Submit"/>&nbsp;&nbsp;
-        <input type="button" value="Clear" @click="clear"/>
+    <div class="no-print" style="height: 100%;background: aliceblue;position: absolute;width: 600px;right: 0px;top: 0px;">
+      <h3>&nbsp; ✍🏻 Type your composition below.</h3>
+      <form @submit.prevent="submit" style="position: fixed;bottom: 0;width: 100%;padding:10px;">
+        <textarea style="font-size:18px;" rows="40" cols="50" v-model="input" placeholder="Enter the composition here."></textarea> <br />
+        <input class="submit" type="submit" value="Submit"/>&nbsp;&nbsp;
+        <input class="otherButton" type="button" value="Clear Page" @click="clear"/> &nbsp;&nbsp;
+        <input class="otherButton" type="button" value="Toggle Google Input" @click="showHideGI"/>&nbsp;&nbsp;
+        <input class="otherButton" type="button" value="Print" @click="print"/>
       </form>
+    </div>
+    <div id="gi" class="no-print" style="display:none;position:absolute;width:800px; height:700px;left:0;top:0;">
+      <input type="button" value="X" @click="showHideGI" style="position:absolute;right: 0;background: aliceblue;"/>
+      <iframe src="https://www.google.com/inputtools/try/" style="width: 100%;height: 100%;"></iframe>
     </div>
   </div>
 </template>
