@@ -1,17 +1,30 @@
-
 export default {
     data() {
       return {
         baseFontSize: 20,
-        input: this.getLastInput(),
+        input: '',
         matra: {
           taliKhali: '',
           symbols: [],
           ending: ''
         },
         page: [],
-        transliterationEnabled: true,
+        transliterationEnabled: true
       };
+    },
+    created() {
+      fetch('./onstart.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('File not found');
+          }
+          return response.text();
+        })
+        .then(data => {
+          var fromLocal = localStorage.getItem('lastInput');
+          this.input = fromLocal ? fromLocal : data;
+        })
+        .catch(error => console.error("Error fetching the onstart text file:", error));
     },
     methods: {
       print() {
@@ -91,9 +104,6 @@ export default {
       },
       updateCache() {
         localStorage.setItem('lastInput', this.input);
-      },
-      getLastInput() {
-        return localStorage.getItem('lastInput');
       },
       submit() {
         this.clear();
