@@ -2,7 +2,7 @@ export default {
     data() {
       return {
         baseFontSize: 20,
-        input: '',
+        input: localStorage.getItem('lastInput'),
         matra: {
           taliKhali: '',
           symbols: [],
@@ -11,20 +11,6 @@ export default {
         page: [],
         transliterationEnabled: true
       };
-    },
-    created() {
-      fetch('./onstart.txt')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('File not found');
-          }
-          return response.text();
-        })
-        .then(data => {
-          var fromLocal = localStorage.getItem('lastInput');
-          this.input = fromLocal ? fromLocal : data;
-        })
-        .catch(error => console.error("Error fetching the onstart text file:", error));
     },
     methods: {
       print() {
