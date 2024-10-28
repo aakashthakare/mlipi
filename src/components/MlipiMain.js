@@ -62,13 +62,14 @@ export default {
           return s;
       },
       actualLength(text) {
+        text = text.replaceAll('<u>', '');
+        text = text.replaceAll('</u>', '');
         const segmenter = new Intl.Segmenter('gu', { granularity: 'grapheme' });
         return [...segmenter.segment(text)].length;
       },
       isMatraNeeded(text) {
         text = text.replaceAll('|', '');
         text = text.replaceAll('।', '');
-        console.log(text);
         return this.actualLength(text) > 1;
       },
       getTextWidth(matras) {
@@ -90,6 +91,34 @@ export default {
       },
       updateCache() {
         localStorage.setItem('lastInput', this.input);
+      },
+      replaceSwars(text) {
+        text = text.replaceAll('s,', 'સા઼');
+        text = text.replaceAll('r,', 'રે઼');
+        text = text.replaceAll('g,', 'ગ઼');
+        text = text.replaceAll('m,', 'મ઼');
+        text = text.replaceAll('p,', 'પ઼');
+        text = text.replaceAll('d,', 'ધ઼');
+        text = text.replaceAll('n,', 'ની઼');
+
+        text = text.replaceAll('s\'', 'સાં');
+        text = text.replaceAll('r\'', 'રેં');
+        text = text.replaceAll('g\'', 'ગં');
+        text = text.replaceAll('m\'', 'મં');
+        text = text.replaceAll('p\'', 'પં');
+        text = text.replaceAll('d\'', 'ધં');
+        text = text.replaceAll('n\'', 'નીં');
+
+        text = text.replaceAll('m^', 'મે');
+
+        text = text.replaceAll('s_', '<u>સા</u>');
+        text = text.replaceAll('r_', '<u>રે</u>');
+        text = text.replaceAll('g_', '<u>ગ</u>');
+        text = text.replaceAll('m_', '<u>મ</u>');
+        text = text.replaceAll('p_', '<u>પ</u>');
+        text = text.replaceAll('d_', '<u>ધ</u>');
+        text = text.replaceAll('n_', '<u>ની</u>');
+        return text;
       },
       submit() {
         this.clear();
@@ -121,6 +150,7 @@ export default {
                 taliKhali = mt.charAt(0);
                 mt = mt.substring(1, mt.length);
               }
+              mt = this.replaceSwars(mt);
             
               matras.push({
                 taliKhali: taliKhali,

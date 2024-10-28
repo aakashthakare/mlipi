@@ -7,7 +7,7 @@
             <b>{{matra.symbols}}</b>
           </span>
           <span v-else >
-            <span>{{matra.symbols}}</span>
+            <span v-html="matra.symbols"></span>
             <span :style="{float:'left', color: isMatraNeeded(matra.symbols) ? 'black'  :'transparent', fontSize:'18px', marginTop: '-10px'}">
               <span>◟</span>
               <span v-for="n in actualLength(matra.symbols)" :key="n">_</span>
