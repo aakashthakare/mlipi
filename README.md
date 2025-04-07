@@ -1,4 +1,5 @@
 # mlipi
+Frontend app for rendering Music text in [Bhatkhande](https://en.wikipedia.org/wiki/Vishnu_Narayan_Bhatkhande) Lipi.
 
 ## Project setup
 ```
